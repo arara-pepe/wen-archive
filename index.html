@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ウェンアーカイブ</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+  <style>
+body {
+  font-family: "Zen Maru Gothic", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,140,155,0.55), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(181,235,250,0.75), transparent 40%),
+    linear-gradient(135deg, #fff7f9, #eefbff);
+  padding: 24px;
+  color: #333;
+}
+
+h1 {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  color: #444;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+    .container {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+.card {
+  width: 260px;
+  background: linear-gradient(180deg, #ffffff, #fdfdfd);
+  border-radius: 22px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(181,235,250,0.7);
+  transition: all 0.25s;
+
+   opacity: 0;                 
+  transform: translateY(20px);
+  animation:
+  fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+  floaty 3s ease-in-out infinite;
+}
+.card:hover {
+  transform: translateY(-14px) scale(1.06);
+}
+.card:active {
+  transform: scale(0.96);
+}
+
+    .card img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .card a {
+      color: black;
+      text-decoration: none;
+    }
+
+    .card p {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .year {
+  color: #FF8C9B;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+
+button {
+  padding: 10px 16px;
+  margin: 6px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #b5ebfa, #ffffff);
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 10px rgba(181,235,250,0.6);
+}
+
+button:hover {
+  background: linear-gradient(135deg, #FF8C9B, #ffb6c1);
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(255,140,155,0.5);
+}
+button.active {
+  background: linear-gradient(135deg, #FF8C9B, #ff6f91);
+  color: white;
+  box-shadow: 0 6px 18px rgba(255,140,155,0.6);
+}
+button:active {
+  transform: scale(0.92);
+}
+#search {
+  width: 250px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 999px;
+  border: none;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+#search {
+  transition: 0.2s;
+}
+
+#search:focus {
+  box-shadow: 0 4px 12px rgba(255,140,155,0.4);
+}
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+@media (max-width: 600px) {
+  body {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  #search {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .container {
+    justify-content: center;
+  }
+}
+  </style>
+</head>
+
+<body>
+<h1 id="today-title"></h1>
+
+<input type="text" id="search" placeholder="配信タイトルで検索...">
+
+<div id="buttons"></div>
+
+  <div id="app"></div>
+
+  <script>
+    const today = new Date();
+    const todayMonth = today.getMonth() + 1;
+    const todayDay = today.getDate();
+
+    document.getElementById("today-title").textContent =
+      "今日は " + todayMonth + "/" + todayDay + " です";
+
+    const videos = [
+      {
+  date: "2023-05-31",
+  title: "【マリオカート】走行中9位以下で即キ◯ピオになる参加型！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=Rs9QEZQiKgE"
+},
+{
+  date: "2023-05-30",
+  title: "【PAON-ぱおん-】ドリンクバーあるよ？話し合おう、、【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=1epXw58_5OI"
+},
+{
+  date: "2023-05-29",
+  title: "【雑談】初○○○参加！恥ずかしかった話！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=4MQwIDKrIaE"
+},
+{
+  date: "2023-05-27",
+  title: "【フォールガイズ】エルフの耳がくっついて離れないヒーロー！#FSカスタム  【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=-ceURYDm5BM"
+},
+{
+  date: "2023-05-26",
+  title: "【Q REMASTERED】実は四捨五入でクリアできるの知ってた！？ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=fOan5qqMqw0"
+},
+{
+  date: "2023-05-24",
+  title: "【雑談】最近調子どう？うちは寿司食べたい！質問コーナーも！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=jH_ivkKosDU"
+},
+{
+  date: "2023-05-23",
+  title: "【マッチングアプリで出会い厨してみた】第２話！恋は掴むもの！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=ce41N9YqHQo"
+},
+{
+  date: "2023-05-22",
+  title: "【マイクラ】業者さんから連絡が来なくて詰んだ！？ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=vLfG7GoI5rE"
+},
+{
+  date: "2023-05-21",
+  title: "【誰か来た!!】壺男！10デシベル以上の音を出したら即終了 ２話 【赤城ウェン/にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=PMxUI3tlQss"
+},
+{
+  date: "2023-05-20",
+  title: "【スプラトゥーン３】ドロドロ塗りたくる！ランクやらせて！！  【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=-kCAAfgdrrY"
+},
+{
+  date: "2023-05-19",
+  title: "【フォールガイズ】敗北を知りたい！無敗のヒーロー！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=2LsdQH-d6mk"
+},
+{
+  date: "2023-05-18",
+  title: "【空気読み】気まずい卒業！陽キャになる！空気読み。オンライン【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=qjKSRQtSuog"
+},
+{
+  date: "2023-05-16",
+  title: "【リズム天国】絶対笑わない！リズ三段活用ヒーロー！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=UJ8xNmlBBgQ"
+},
+{
+  date: "2023-05-15",
+  title: "【APEX】レベル上げる！即終了！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=D9gnHfmbjtI"
+},
+{
+  date: "2023-05-15",
+  title: "【雑談】豪運ヒーロ誕生！色々ありすぎた東西コラボ振り返り！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=-jjs9-rjnuY"
+},
+{
+  date: "2023-05-13",
+  title: "【マリオカート】６位は１位！被弾したら即キ◯ピオになる参加型！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=Aj4XlYT0mIw"
+},
+{
+  date: "2023-05-12",
+  title: "【APEX】何もしてなくても即終了！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=bYykjjhQHNg"
+},
+{
+  date: "2023-05-10",
+  title: "【APEX】初見で新シーズンいくぞ！新レジェンド使いたい！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=btGZnSZBGcI"
+},
+{
+  date: "2023-05-09",
+  title: "【ホグワーツレガシー】お前もデスイーターにならないか？ パート２【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=UcCeygLlI9g"
+},
+{
+  date: "2023-05-08",
+  title: "【雑談】祝１ヶ月！報告あり！ありがとう感謝サンキュー！スパチャ読み！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=76cJaZrilGQ"
+},
+{
+  date: "2023-05-07",
+  title: "【放送事故】癖強っ、、誰も助からないクシャミ 【赤城ウェン/にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=D55ugYiG7NI"
+},
+{
+  date: "2023-05-06",
+  title: "【スプラトゥーン３】インク界のヒーロ！塗りたくる！  【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=ps8-p7bTdxU"
+},
+{
+  date: "2023-05-06",
+  title: "【APEX】エルフ様方にご挨拶するヒーロー！#ちゅりゅーんカスタム  【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=I2lyUnJiIH0"
+},
+{
+  date: "2023-05-05",
+  title: "【過酷すぎ!!】壺男！10デシベル以上の音を出したら即終了 1話 【赤城ウェン/にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=DfAz4VuCX8A"
+},
+{
+  date: "2023-05-04",
+  title: "【APEX】夜ご飯前の乾杯エペ練習！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=8ijDuDhdCng"
+},
+{
+  date: "2023-05-03",
+  title: "【Super Bunny Man】 うちらキマっちゃってるヒーロー！with 佐伯イッテツ【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=eIAi7fXygYc"
+},
+{
+  date: "2023-05-02",
+  title: "【ホグワーツレガシー】お前もデスイーターにならないか？ ヒーローが魔法を学ぶ！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=uEioqSRe53o"
+},
+{
+  date: "2023-05-01",
+  title: "【リズム天国】絶対笑わない！リズムありすぎヒーロー！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=2LgiU5iywlM"
+},
+{
+  date: "2023-04-30",
+  title: "【APEX】夜ご飯前のエペ練習！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=R5ptGdHXEh4"
+},
+{
+  date: "2023-04-30",
+  title: "【マイクラ】諦めるな！もう泣かない！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=0_1tkeWFrdk"
+},
+{
+  date: "2023-04-29",
+  title: "【雑談】スパチャ読み！みんなとお話！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=WP5_w3CKp4Y"
+},
+{
+  date: "2023-04-29",
+  title: "【絶対音感】ヒーロはリズム感MAXなんだって！！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=slJOO1p8aQo"
+},
+      {
+  date: "2024-05-31",
+  title: "＃１０【ヒーロー鯖マイクラ】華金！くまライドハウス制作！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=3JJHgUJM1QI"
+},
+{
+  date: "2024-05-30",
+  title: "＃２【#にじさんじスマブラ杯 】基礎を習得！基本が大事なはず！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=g5u5LBg_V7c"
+},
+{
+  date: "2024-05-28",
+  title: "＃９【ヒーロー鯖マイクラ】くまライドハウス制作！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=_EvRq3q1o_o"
+},
+{
+  date: "2024-05-27",
+  title: "＃１【#にじさんじスマブラ杯 】キャラどうするよ！！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=3xRyxt_08M8"
+},
+{
+  date: "2024-05-25",
+  title: "＃８【ヒーロー鯖マイクラ】全ロスの次の日ってこんな感じ！装備揃える！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=4LewXMrM2E0"
+},
+{
+  date: "2024-05-24",
+  title: "＃７【ヒーロー鯖マイクラ】その２ くまライドハウス制作！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=PbVWyu-xtZc"
+},
+{
+  date: "2024-05-22",
+  title: "【ヒーロー鯖マイクラ】くまライドハウス制作！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=aRkUDc53VeU"
+},
+{
+  date: "2024-05-21",
+  title: "【マイクラ】煉獄であり地獄を見つけたのでログインする！ヒーローズ鯖！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=6KD_Na33SM0"
+},
+{
+  date: "2024-05-20",
+  title: "【マイクラ】やっと初の影MOD導入！くまハウス作る！ヒーローズ鯖！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=qiNBxnyedM8"
+},
+{
+  date: "2024-05-18",
+  title: "【マイクラ】今回こそ初ネザー城を見たい！！ヒーローズ鯖！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=Img_qk9oG3k"
+},
+{
+  date: "2024-05-17",
+  title: "【マイクラ】初ネザー行こう！！ヒーロー鯖！Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=Os40zjlByI8"
+},
+{
+  date: "2024-05-16",
+  title: "【マイクラ】初のめちゃつA鯖！ with 叢雲カゲツ Minecraft【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=RyDUWUD40-w"
+},
+{
+  date: "2024-05-16",
+  title: "【ピザ配達に来ただけなのに、、】この家...なんか変...！Night Grove【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=S9hyMraMBvk"
+},
+{
+  date: "2024-05-14",
+  title: "＃２【怖すぎと話題！】声に反応するバケモン集合！今日こそクリア！The Classrooms【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=MYrLI4x6oCw"
+},
+{
+  date: "2024-05-12",
+  title: "【怖すぎと話題！】声に反応するバケモンから逃げろ！The Classrooms【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=2EGjoMKdHyg"
+},
+{
+  date: "2024-05-11",
+  title: "【話題！初見バニー】このおっさん...なんか変...！女子に見つかったら即終了【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=yZgzCr8rJSg"
+},
+{
+  date: "2024-05-10",
+  title: "【APEX】新シーズン！新キャラ！珍走団！ with 宇佐美リト、佐伯イッテツ【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=VX3J6czzr1g"
+},
+{
+  date: "2024-05-08",
+  title: "【大会コース振り返り 】参加型！マリカ杯コースリベンジ！マリオカート8DX【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=TSB7r3eSH9k"
+},
+{
+  date: "2024-05-07",
+  title: "【変な家シミュレーター】理想の部屋探し！この赤城...なんかウェン…【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=PqNEY9WiWaQ"
+},
+{
+  date: "2024-05-06",
+  title: "準決勝【#マリカにじさんじ杯 】勝ち残れ！準決勝Bグループ！マリオカート8DX【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=ad82W4jM1Pk"
+},
+{
+  date: "2024-05-06",
+  title: "準々決勝【#マリカにじさんじ杯 】再びの魔境Cグループ！マリオカート8DX【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=jC4OG809c1o"
+},
+{
+  date: "2024-05-06",
+  title: "＃１５【マリオカート8DX】大会本戦！直前の反省と調整！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=Im2tmNIbjjU"
+},
+{
+  date: "2024-05-05",
+  title: "大会本番【#マリカにじさんじ杯 】魔境Bグループで勝ち抜け！マリオカート8DX【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=rlYH3VaD9GQ"
+},
+{
+  date: "2024-05-05",
+  title: "＃１４【マリオカート8DX】大会当日！直前エイム調整！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=L499rQH9DJo"
+},
+{
+  date: "2024-05-04",
+  title: "＃１３【マリオカート8DX】新人男子マリカで激弱だったMAP練習！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=shRYm5YcbO4"
+},
+{
+  date: "2024-05-03",
+  title: "＃１２【マリオカート8DX】熱きメンズ集合！新人男子合同練習会 #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=bZHRFFGBErc"
+},
+{
+  date: "2024-05-03",
+  title: "＃１１【マリオカート8DX】朝活カゲツきゅんと爆走！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=DbKiSAyAc4k"
+},
+{
+  date: "2024-05-02",
+  title: "＃１１【マリオカート8DX】朝活参加型！対人練習！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=poAOC3PGHOE"
+},
+{
+  date: "2024-05-01",
+  title: "＃９【マリオカート8DX】お昼活参加型！対人練習！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=NE3FS6n3jM0"
+},
+{
+  date: "2024-05-01",
+  title: "＃１０【マリオカート8DX】フルパだー！格付けマリカ with にじさんじの皆様！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=UQDqNqX0cPo"
+},
+{
+  date: "2024-04-30",
+  title: "＃８【マリオカート8DX】朝活NISC練習！ #マリカにじさんじ杯 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=BT9xgHUl2p0"
+},
+      {
+  date: "2025-05-31",
+  title: "【最後のダディダディ】踊ってみたってことだよね！見捨てないでくれ！【赤城ウェン/にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=H90GEDxAL0Q"
+},
+{
+  date: "2025-05-30",
+  title: "【マイクラ】華金ハードコア！爆速ネザーいくぞ！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=_DfvZ3pnz8s"
+},
+{
+  date: "2025-05-29",
+  title: "【ソロ勢必見！】某ファミレスの立ち回り講座！【赤城ウェン/にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=Wbbl2Ju1UzE"
+},
+{
+  date: "2025-05-28",
+  title: "【マイクラ】ハードコアやったろう！目指せ爆速！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=0mKkEeqOcMA"
+},
+{
+  date: "2025-05-26",
+  title: "【オフコラボ】俺たちのNo.1ふりかけ決定戦！ with ガク3、そうま、なぎとら【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=RlL_dS3ONvE"
+},
+{
+  date: "2025-05-25",
+  title: "【あつまれどうぶつの森】ガチ儲け！総額◯◯◯万ベル上乗せ！閉店までに回収！ ＃４７【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=LzlH8TxZAkc"
+},
+{
+  date: "2025-05-24",
+  title: "【初公開の特技！】肉占いの的中率がエグい赤城ウェン 【にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=TK0x0FsS67I"
+},
+{
+  date: "2025-05-23",
+  title: "【あつまれどうぶつの森】華金！飲み屋の路地裏作るぞ！ ＃４６【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=z2cZY-nAV_I"
+},
+{
+  date: "2025-05-22",
+  title: "【#にじマイクラ占領戦 】最終決戦！西チーム！DAY３！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=xg9XBxwlmPs"
+},
+{
+  date: "2025-05-21",
+  title: "【#にじマイクラ占領戦 】西チーム！DAY２！エメラルド保有者が正義ってことね！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=Qtxr0vQ9AiI"
+},
+{
+  date: "2025-05-21",
+  title: "【本当にすみません】謝罪中に他責が止まらない赤城ウェン【にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=E5hMkvZDvh0"
+},
+{
+  date: "2025-05-20",
+  title: "【#にじマイクラ占領戦 】西チーム！DAY１【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=i9LS0DRpacg"
+},
+{
+  date: "2025-05-19",
+  title: "【KPトーク】自作おつまみで食べ飲み！にじトイメンバー再集結！ with ニュイ3、ななすず3【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=mcmU3Dsr-0w"
+},
+{
+  date: "2025-05-18",
+  title: "【あつまれどうぶつの森】島訪問！パチ屋立ち上げ素材回収！ ＃４５【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=jVrAerTxK8M"
+},
+{
+  date: "2025-05-17",
+  title: "【Content Warning】告知をかけてバズる！ with オリエンス【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=H5L5-62bZHg"
+},
+{
+  date: "2025-05-17",
+  title: "【#にじさんじVスロ大会 Aリーグ】引き当てろ神台を！設定６のバジリスクタイムだろ！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=VvCaypIza9A"
+},
+{
+  date: "2025-05-16",
+  title: "【激アツ】3D赤城ウェン新台入替！振り返り！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=3vi4kIc6zgA"
+},
+{
+  date: "2025-05-16",
+  title: "【歌ってみた /3D】アイム・ア・ビリーバー 【赤城ウェン/にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=qSP_hEsbbOo"
+},
+{
+  date: "2025-05-15",
+  title: "【喉が崩壊】マイク声量ギャン上げに反応して敵を倒せ！THREAT -SCREAM AND ESCAPE-【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=TtynwnBt7uE"
+},
+{
+  date: "2025-05-14",
+  title: "【自分を信じろ！】KP度診断！逆に空気を読めてる赤城ウェン！みんなで空気読み。4【にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=xnsfQvSU6iM"
+},
+{
+  date: "2025-05-13",
+  title: "【あつまれどうぶつの森】パチ屋開業に向けて準備！ ＃４４【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=49W-y8YECIU"
+},
+{
+  date: "2025-05-12",
+  title: "【タピるお茶屋】タピオカ屋を経営しよう！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=O5HjamXaywc"
+},
+{
+  date: "2025-05-11",
+  title: "【#おえもりにじさんじ杯 】予選Jリーグ！オ⤴レ⤵の芸術についてこれるか？【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=TMJwHD64WPA"
+},
+{
+  date: "2025-05-10",
+  title: "【あつまれ！おえかきの森】描こうぜ！with みんな！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=c9ASQ2rFK-o"
+},
+{
+  date: "2025-05-09",
+  title: "【ダディダディ】おしゃピクで歌って踊ってみた！ってことになる？ #西山ダディダディ 【赤城ウェン/にじさんじ】  #shorts",
+  url: "https://www.youtube.com/watch?v=fWvfh8Ao7iI"
+},
+{
+  date: "2025-05-08",
+  title: "【GW終わった】居酒屋でマッチング！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=_UAM6TC-FrA"
+},
+{
+  date: "2025-05-06",
+  title: "【あつまれどうぶつの森】久々あかきり島！ ＃４３【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=BaLebGHXOKw"
+},
+{
+  date: "2025-05-05",
+  title: "【#マリカにじさんじ杯 】準決勝！Bリーグ！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=xE-GsS9irQQ"
+},
+{
+  date: "2025-05-05",
+  title: "【#マリカにじさんじ杯 】本戦！Aリーグ！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=2mjC9cWhPN0"
+},
+{
+  date: "2025-05-04",
+  title: "【マリカ8DX】前夜祭！ with にじさんじの皆さん！ #マリカにじさんじ杯【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=0S1eNMofnDY"
+},
+{
+  date: "2025-05-03",
+  title: "【マリカ8DX】深夜ひっそり！ #マリカにじさんじ杯【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=N2eqMhILWd8"
+},
+{
+  date: "2025-05-02",
+  title: "【マリカ8DX】華金ダッシュ！ #マリカにじさんじ杯【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=lgOvgtLjUzg"
+},
+{
+  date: "2025-05-01",
+  title: "【マリカ8DX】みんなで練習！ #マリカにじさんじ杯【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=XxH4-e4nL1I"
+},
+{
+  date: "2025-04-29",
+  title: "【マリカ8DX】いろいろ練習！ #マリカにじさんじ杯【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=mNVtui_H_4A"
+},
+      {
+  date: "2026-04-28",
+  title: "2026年4/28の配信",
+  url: "https://www.youtube.com/watch?v=2p2IteCbKSc"
+},
+      {
+  date: "2025-04-28",
+  title: "2025年4/28の配信",
+  url: "https://www.youtube.com/watch?v=y0IcjgcU3lk"
+},
+      {
+        date: "2024-04-28",
+        title: "2024年4/28の配信",
+        url: "https://www.youtube.com/live/UJB74RrwLYM?si=j-XGiiLjer6QsSkI"
+      },
+      {
+        date: "2023-04-28",
+        title: "2023年4/28の配信",
+        url: "https://www.youtube.com/live/k62UnQrwJwA?si=ZnkfhZC2JUUidVjG"
+      },
+      {
+        date: "2026-04-27",
+        title: "2026年4/27の配信",
+        url: "https://www.youtube.com/live/-baS4VW-WG4?si=9SDorbS8MtvqhvFP"
+      },
+      {
+        date: "2025-04-27",
+        title: "2025年4/27の配信",
+        url: "https://www.youtube.com/live/cA3Bx3zuTlw?si=EA5-WattGiVZBBHK"
+      },
+      {
+        date: "2024-04-27",
+        title: "2024年4/27の配信",
+        url: "https://www.youtube.com/live/UJB74RrwLYM?si=gv03Dj96MZKXBrnX"
+      },
+      {
+        date: "2023-04-27",
+        title: "2023年4/27の配信",
+       url: "https://www.youtube.com/live/x1M00C1ivD4?si=AVnNqiK_jj1Wghv3"
+      },
+      {
+  date: "2026-04-26",
+  title: "【PowerWash Simulator 2】仮眠から起床したのでガチ眠準備！寝る人集合！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=ltG5cV8JDXk"
+},
+{
+  date: "2026-04-26",
+  title: "【#にじさんじスマブラ杯 】Dブロック！当日漬けいくぞ！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=-qHrKrOw3SU"
+},
+{
+  date: "2026-04-25",
+  title: "【お・ど・れ・た】爆裂愛してる / M!LK【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=uQ5Ehn6LiQs"
+},
+{
+  date: "2026-04-24",
+  title: "【雀魂大大大大大大大感謝杯7th】Day3 今日は特に感謝しています、なので！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=dGgQIMEdXPs"
+},
+{
+  date: "2026-04-23",
+  title: "【雀魂】本番前日！顔合わせ麻雀！ with 五十嵐梨花3、健屋花那3、天開司3【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=t53LaC3_--s"
+},
+{
+  date: "2026-04-22",
+  title: "【トモコレ】島民こい！６人目の新メンバー！花咲りの男たち つけ麺パラダイス！＃４【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=qc44AyVrnvc"
+},
+{
+  date: "2026-04-21",
+  title: "【人生初トモコレ】５人目の新メンバー！花咲りの男たち つけ麺パラダイス！＃３【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=B_7ZMjdo9ZM"
+},
+{
+  date: "2026-04-20",
+  title: "【ご近所バトル】この街のボスは俺だ！with 情報差分組【にじさんじ / 赤城ウェン/榊ネス/長尾景/星導ショウ】",
+  url: "https://www.youtube.com/watch?v=6syicubr2cQ"
+},
+{
+  date: "2026-04-19",
+  title: "【人生初トモコレ】新メンバー到来！花咲りの男たち つけ麺パラダイス！＃２【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=13f55w7bRW8"
+},
+{
+  date: "2026-04-18",
+  title: "【人生初トモコレ】トモダチコレクション わくわく生活！IN 新人メンズとゴリエ【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=0hdC4kP7V0E"
+},
+{
+  date: "2026-04-17",
+  title: "【隙マ】開けたら閉めるって何度言ったらわかるの！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=Xz2TNrC4LYw"
+},
+{
+  date: "2026-04-15",
+  title: "【ギリ踊れてるとした！】赤城とウェンが #不可Boom  踊ってみた 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=qXYnW5ctdJU"
+},
+{
+  date: "2026-04-14",
+  title: "【あつまれどうぶつの森】シリーズ25周年おめでとう！久々まれ森！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=9QK3NG2lRSc"
+},
+{
+  date: "2026-04-13",
+  title: "【ゲリラ朝枠】4月も起きた！オハ城2026【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=QpZPX1ohKw4"
+},
+{
+  date: "2026-04-12",
+  title: "【マイクラ】４周目！即終了ハードコアいけんの！？ with 叢雲カゲツ【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=AH1baMsQGwc"
+},
+{
+  date: "2026-04-12",
+  title: "【マイクラ】３周目！即終了ハードコアいけんの！？ with 叢雲カゲツ【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=snoBvJ-Otqg"
+},
+{
+  date: "2026-04-11",
+  title: "【納車！】ぶん回していこう！【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=AvvuxY9tDuc"
+},
+{
+  date: "2026-04-11",
+  title: "【踊れすぎてみた！】好きすぎて滅！with 星導ショウ【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=qEcaMA2iWpc"
+},
+{
+  date: "2026-04-10",
+  title: "【永久保存版】赤城ウェン特製唐揚げに美味しさ１００倍上乗せできるタルタルソース！【にじさんじ】",
+  url: "https://www.youtube.com/watch?v=LvfAKoIvXUo"
+},
+{
+  date: "2025-04-26",
+  title: "【マリカ8DX】夜練！ #マリカにじさんじ杯 with にじさんじの皆さん【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=wnprdLpz5zg"
+},
+{
+  date: "2025-04-26",
+  title: "【マリカ8DX】寝起き走り！マップミスなくす！ #マリカにじさんじ杯 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=YsRojhrTvAU"
+},
+{
+  date: "2025-04-24",
+  title: "【マリカ8DX】#マリカにじさんじ杯 が近い！走るんだ！ with にじさんじの皆【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=CRWSWOeBcU0"
+},
+{
+  date: "2025-04-23",
+  title: "【マリカ8DX】ぎゃうるふ！マリカにじさんじ杯へ向けて！ with 小柳ロウ【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=U4ZjXqpytXg"
+},
+{
+  date: "2025-04-22",
+  title: "【マリカ8DX】情報差分組スクリム！報連相して！ with ケイナガオ3、るべショウ、榊ネスぅ⤴ 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=b9U6lRzB0IE"
+},
+{
+  date: "2025-04-21",
+  title: "【#マリカにじさんじ杯 】もと現新人が走る with メンズ達！追加メンバーあるかも！ 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=tSqt6LtnFJ8"
+},
+{
+  date: "2025-04-20",
+  title: "【マリオカート8DX】目標をセンターに入れてKPする練習！#マリカにじさんじ杯 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=UqaE52VuiwE"
+},
+{
+  date: "2025-04-19",
+  title: "【あつまれどうぶつの森】タヌキチ商店が封印されました ＃４２【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=oQPkbMzKPc4"
+},
+{
+  date: "2025-04-19",
+  title: "【歌って踊ってみた / 3D】Study Equal Magic! / S.E.M（SideM）【赤城ウェン・宇佐美リト・佐伯イッテツ・緋八マナ / にじさんじ】",
+  url: "https://www.youtube.com/watch?v=M-eGgFfIN4I"
+},
+{
+  date: "2025-04-18",
+  title: "【原神/Genshin】華金だあ！ガイア！ついに酒場特定したぞ！＃３ 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=rJA12HlXufc"
+},
+{
+  date: "2025-04-17",
+  title: "【押してダメなら押してみろ】CHACEボタンなら押し方わかる！動画で見た！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=bjh7IUGtxzU"
+},
+{
+  date: "2025-04-15",
+  title: "【勝手に予想】お昼休憩の過ごし方！表参道編 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=Mj8x1DMH8tg"
+},
+{
+  date: "2025-04-13",
+  title: "【あつまれどうぶつの森】銀行を設立！秩序 VS 正義 ＃４１ 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=AEE_jP_3CkY"
+},
+{
+  date: "2025-04-12",
+  title: "【体験版】スーパーグイット酒人！１日限りの酒屋！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=nUe7XQnea84"
+},
+{
+  date: "2025-04-11",
+  title: "【A Little to the Left】すごくチル！１時間スッキリ整頓枠！【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=eqA_aMYJ94I"
+},
+{
+  date: "2025-04-10",
+  title: "【あつまれどうぶつの森】ご新規２名様ご来店です！ ＃４０ 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=nJggOpxdbfI"
+},
+{
+  date: "2025-04-09",
+  title: "【さすがに！】一旦乾杯しとくか！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=GyDNRXDF4wA"
+},
+{
+  date: "2025-04-09",
+  title: "【禁断の大公開】永久保存版！赤城ウェン特製唐揚げの作り方【にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=FRx9STdMROQ"
+},
+{
+  date: "2025-04-07",
+  title: "【原神/Genshin】ガイア！好きな酒場どこ？住所教えてって言うてますやん＃２【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=GNOAX1UOqDE"
+},
+{
+  date: "2025-04-06",
+  title: "【大掃除】1時間！Get 掃除 with KP！ 【赤城ウェン/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=TUQWdY7Cr_I"
+},
+{
+  date: "2025-04-05",
+  title: "【あつまれどうぶつの森】新しい事業始めます！ ＃３９ 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=1d-S6Zi87eI"
+},
+{
+  date: "2025-04-04",
+  title: "【愛されてます】ガチ盛り盛り演出と共に釣りまくる赤城ウェン！あつ森番外編#１【にじさんじ】 #shorts",
+  url: "https://www.youtube.com/watch?v=1W2MilJUMfc"
+},
+{
+  date: "2025-04-03",
+  title: "【原神/Genshin】2025年に完全初見の原神！助けてくれー＃１【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=-ReTTvNl_hY"
+},
+{
+  date: "2025-04-02",
+  title: "【隧道】Vlog動画撮ろう！ IN トンネル【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=Xe-vKo4kjKI"
+},
+{
+  date: "2025-04-01",
+  title: "【あつまれどうぶつの森】新生活スタートと言ったら大掃除！ ＃３８ 【にじさんじ / 赤城ウェン】",
+  url: "https://www.youtube.com/watch?v=OplPiwVCyU8"
+},
+
+    ];
+
+    const groupedVideos = {};
+
+    videos.forEach(function(video) {
+      const date = new Date(video.date);
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const key = month + "/" + day;
+
+      if (!groupedVideos[key]) {
+        groupedVideos[key] = [];
+      }
+
+      groupedVideos[key].push(video);
+    });
+
+    const app = document.getElementById("app");
+    function getVideoId(video) {
+  if (video.videoId) {
+    return video.videoId;
+  }
+
+  const url = new URL(video.url);
+
+  if (url.pathname.startsWith("/live/")) {
+    return url.pathname.split("/live/")[1];
+  }
+
+  return url.searchParams.get("v");
+}
+    const buttonsDiv = document.getElementById("buttons");
+
+// 今日ボタン
+const todayBtn = document.createElement("button");
+todayBtn.textContent = "今日";
+todayBtn.onclick = showToday;
+buttonsDiv.appendChild(todayBtn);
+
+// 日付一覧を作る
+const dates = [...new Set(videos.map(v => {
+  const d = new Date(v.date);
+  return (d.getMonth()+1) + "/" + d.getDate();
+}))].sort(function(a, b) {
+  const [monthA, dayA] = a.split("/").map(Number);
+  const [monthB, dayB] = b.split("/").map(Number);
+
+  if (monthA !== monthB) {
+    return monthA - monthB;
+  }
+
+  return dayA - dayB;
+});
+
+dates.forEach(dateStr => {
+  const [month, day] = dateStr.split("/");
+
+  const btn = document.createElement("button");
+  btn.textContent = dateStr;
+  btn.id = "btn-" + month + day;
+  btn.onclick = function() {
+    showDate(Number(month), Number(day));
+  };
+
+  buttonsDiv.appendChild(btn);
+});
+
+// 年フィルターボタン
+const years = [...new Set(videos.map(v => v.date.slice(0,4)))];
+
+years.forEach(year => {
+  const btn = document.createElement("button");
+  btn.textContent = year + "年";
+  btn.onclick = function() {
+    filterByYear(year);
+  };
+  buttonsDiv.appendChild(btn);
+});
+
+
+    for (const date in groupedVideos) {
+      const title = document.createElement("h1");
+      title.textContent = date + "の配信";
+      app.appendChild(title);
+
+      const container = document.createElement("div");
+      container.className = "container";
+
+      groupedVideos[date].forEach(function(video) {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+          <a href="https://www.youtube.com/watch?v=${getVideoId(video)}" target="_blank">
+  <img src="https://img.youtube.com/vi/${getVideoId(video)}/hqdefault.jpg">
+            <p class="year">${video.date.slice(0, 4)}年</p>
+<p>${video.title}</p>
+          </a>
+        `;
+
+        container.appendChild(card);
+      });
+
+      app.appendChild(container);
+      }
+
+function showDate(month, day) {
+  const sections = document.querySelectorAll("h1");
+  let found = false;
+
+  sections.forEach(function(title) {
+    if (title.textContent.includes("の配信")) {
+if (title.textContent === month + "/" + day + "の配信") {
+        title.style.display = "block";
+        title.nextElementSibling.style.display = "flex";
+        found = true;
+      } else {
+        title.style.display = "none";
+        title.nextElementSibling.style.display = "none";
+      }
+    }
+  });
+
+  const oldMsg = document.getElementById("no-video-message");
+  if (oldMsg) {
+    oldMsg.remove();
+  }
+
+  if (!found) {
+    const msg = document.createElement("p");
+    msg.id = "no-video-message";
+    msg.textContent = "この日の配信はありません";
+    app.appendChild(msg);
+  }
+
+  document.querySelectorAll("button").forEach(function(btn) {
+    btn.classList.remove("active");
+  });
+
+  const id = "btn-" + month + day;
+  const activeBtn = document.getElementById(id);
+
+  if (activeBtn) {
+    activeBtn.classList.add("active");
+  }
+}
+    function showToday() {
+  showDate(todayMonth, todayDay);
+}
+document.getElementById("search").addEventListener("input", function(e) {
+  const keyword = e.target.value.toLowerCase();
+
+  const sections = document.querySelectorAll("h1");
+
+  sections.forEach(function(title) {
+    if (title.textContent.includes("の配信")) {
+      const container = title.nextElementSibling;
+      const cards = container.querySelectorAll(".card");
+
+      let hasMatch = false;
+
+      cards.forEach(function(card) {
+        const text = card.textContent.toLowerCase();
+
+        if (text.includes(keyword)) {
+          card.style.display = "block";
+          hasMatch = true;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      if (keyword === "") {
+        title.style.display = "block";
+        container.style.display = "flex";
+        cards.forEach(card => card.style.display = "block");
+      } else {
+        if (hasMatch) {
+          title.style.display = "block";
+          container.style.display = "flex";
+        } else {
+          title.style.display = "none";
+          container.style.display = "none";
+        }
+      }
+    }
+  });
+});
+function showAllVideos() {
+  const sections = document.querySelectorAll("h1");
+
+  sections.forEach(function(title) {
+    if (title.textContent.includes("の配信")) {
+      title.style.display = "block";
+      title.nextElementSibling.style.display = "flex";
+    }
+  });
+}
+function filterByYear(year) {
+  const sections = document.querySelectorAll("h1");
+
+  sections.forEach(function(title) {
+    if (title.textContent.includes("の配信")) {
+      const container = title.nextElementSibling;
+      const cards = container.querySelectorAll(".card");
+
+      let hasMatch = false;
+
+      cards.forEach(function(card) {
+        if (card.textContent.includes(year)) {
+          card.style.display = "block";
+          hasMatch = true;
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      if (hasMatch) {
+        title.style.display = "block";
+        container.style.display = "flex";
+      } else {
+        title.style.display = "none";
+        container.style.display = "none";
+      }
+    }
+  });
+}
+  </script>
+</body>
+</html>
