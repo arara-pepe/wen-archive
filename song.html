@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>歌ってみたアーカイブ</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+
+  <style>
+body {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(255,140,155,0.55), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(181,235,250,0.75), transparent 40%),
+    linear-gradient(135deg, #fff0f4, #e6faff);
+  padding: 70px 24px 24px;
+  color: #333;
+}
+
+h1 {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  color: #444;
+  font-weight: 800;
+}
+
+.logo {
+  position: fixed;
+  top: 16px;
+  left: 20px;
+  z-index: 200;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #FF8C9B, #b5ebfa);
+  color: white;
+  font-weight: 800;
+  font-size: 22px;
+  box-shadow: 0 6px 16px rgba(255,140,155,0.35);
+}
+
+.menu {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 300;
+}
+
+.menu-btn {
+  font-size: 24px;
+  border: none;
+  background: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.menu-content {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  background: white;
+  border-radius: 16px;
+  padding: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.menu-content button {
+  width: 150px;
+}
+
+#search {
+  width: 250px;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 999px;
+  border: none;
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+button {
+  padding: 10px 16px;
+  margin: 6px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #b5ebfa, #ffffff);
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,0.6),
+    0 4px 10px rgba(181,235,250,0.6);
+}
+
+button:hover {
+  background: linear-gradient(135deg, #FF8C9B, #ffb6c1);
+  color: white;
+  transform: translateY(-3px) scale(1.05);
+}
+
+.container {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 260px;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.8);
+  border-radius: 24px;
+  padding: 14px;
+  box-shadow:
+    0 8px 20px rgba(255,140,155,0.25),
+    0 4px 10px rgba(181,235,250,0.4);
+  animation: floaty 3s ease-in-out infinite;
+}
+
+.card a {
+  display: block;
+  color: black;
+  text-decoration: none;
+}
+
+.card img {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.card p {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.year {
+  color: #FF8C9B;
+  font-size: 14px;
+}
+
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 80px 16px 16px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  #search {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<div class="logo">🎤 Wen Song Archive</div>
+
+<div class="menu">
+  <button class="menu-btn">⋯</button>
+  <div class="menu-content">
+    <button onclick="location.href='https://arara-pepe.github.io/wen-archive/'">🏠 ホーム</button>
+  </div>
+</div>
+
+<h1>🎤 歌ってみたアーカイブ</h1>
+
+<input type="text" id="search" placeholder="歌動画を検索...">
+
+<div id="buttons"></div>
+
+<div id="app"></div>
+
+<script>
+const videos = [
+
+{
+  date: "2023-04-02",
+  title: "【初の歌ってみた】小悪魔だってかまわない！ cover",
+  url: "https://www.youtube.com/watch?v=VgLdOgr8_qg"
+   },
+{
+  date: "2023-08-27",
+  title: "【歌ってみた】KING / 赤城ウェン【にじさんじ】",
+  url: "https://youtu.be/rUH6RTrMYdU?si=RNMmfzH4JIUA9cBI"
+   },
+{
+  date: "2023-09-30",
+  title: "【歌ってみた】パーペキヒーロー/MECHATU-A",
+  url: "https://www.youtube.com/watch?v=y9Q8JkJARfI"
+   },
+{
+  date: "2023-10-20",
+  title: "【歌ってみた】君に届け / 赤城ウェン【にじさんじ】",
+  url: "https://www.youtube.com/watch?v=fZp-iqz6zR0"
+   },
+{
+  date: "2024-08-03",
+  title: "【歌ってみた】コールボーイ / 赤城ウェン 【にじさんじ】",
+  url: "https://www.youtube.com/watch?v=xBTLR4xZzzU"
+   },
+{
+  date: "2025-01-17",
+  title: "【歌ってみた】厨病激発ボーイ【にじさんじ / Oriens】",
+  url: "https://www.youtube.com/watch?v=pUESvVPhPSI"
+   },
+{
+  date: "2025-03-01",
+  title: "【歌ってみた】絶対敵対メチャキライヤー / 小柳ロウ、赤城ウェン【にじさんじ】",
+  url: "https://www.youtube.com/watch?v=d011Zqyvuww"
+   },
+{
+  date: "2025-04-19",
+  title: "【歌って踊ってみた / 3D】Study Equal Magic! / S.E.M（SideM）【赤城ウェン・宇佐美リト・佐伯イッテツ・緋八マナ / にじさんじ】",
+  url: "https://www.youtube.com/watch?v=M-eGgFfIN4I"
+   },
+{
+  date: "2025-06-25",
+  title: "【歌ってみた】Hurrah!! / HEROES Cover【叢雲カゲツ/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=OCU4UgBBwJ4"
+   },
+{
+  date: "2025-07-25",
+  title: "叶監督へ　『ライラック / Mrs. GREEN APPLE』covered by 私立願ヶ丘高校",
+  url: "https://www.youtube.com/watch?v=q_YVav61U5w"
+   },
+{
+  date: "2025-08-08",
+  title: "【歌ってみた】ヴィラン / 赤城ウェン 【にじさんじ】",
+  url: "https://www.youtube.com/watch?v=I8IGCK737f8"
+   },
+{
+  date: "2025-09-27",
+  title: "【歌ってみた】Beyond the way / Covered by 小柳ロウ×狂蘭メロコ×赤城ウェン",
+  url: "https://www.youtube.com/watch?v=gJW91qMpwsA"
+   },
+   {
+  date: "2025-10-13",
+  title: "【歌ってみた / 3D】One Night Carnival / 氣志團【赤城ウェン/剣持刀也/伏見ガク/にじさんじ】",
+  url: "https://www.youtube.com/watch?v=ZsQOyvc7Y6o"
+   },
+{
+  date: "2025-12-25",
+  title: "【歌ってみた】チキンライス【にじさんじ / Oriens】",
+  url: "https://www.youtube.com/watch?v=30quFnBCcrY"
+   },
+
+{
+  date: "2025-12-28",
+  title: "【歌ってみた】おねがいダーリン / 星導ショウ、赤城ウェン【にじさんじ】",
+  url: "https://www.youtube.com/watch?v=yMEgmmhi-QI"
+   },
+{
+  date: "2026-01-19",
+  title: "「　XVI　」",
+  url: "https://www.youtube.com/watch?v=-Kx6OuzbIB4"
+   },
+{
+  date: "2026-01-30",
+  title: "【歌ってみた】にっこり^^調査隊のテーマ/バイト組cover【にじさんじ/叢雲カゲツ、宇佐美リト、赤城ウェン、星導ショウ】",
+  url: "https://www.youtube.com/watch?v=ofvAnbqmdHE"
+   },
+{
+  date: "2026-03-30",
+  title: "【MV】IENOMI【にじさんじ/Oriens】",
+  url: "https://www.youtube.com/watch?v=mq1LMVcyBCU"
+   },
+  {
+  date: "2026-05-03",
+  title: "【歌ってみた】インザバックルーム / 赤城ウェン、榊ネス、長尾景、星導ショウ【情報差分組 / にじさんじ】",
+  url: "https://youtu.be/aogo_Sg_kYs?si=DY0S3qZjhoCdRYF9"
+   },
+];
+
+const app = document.getElementById("app");
+const buttonsDiv = document.getElementById("buttons");
+
+function getVideoId(video) {
+  const url = new URL(video.url);
+
+  if (url.hostname.includes("youtu.be")) {
+    return url.pathname.slice(1);
+  }
+
+  if (url.pathname.startsWith("/live/")) {
+    return url.pathname.split("/live/")[1];
+  }
+
+  return url.searchParams.get("v");
+}
+
+function renderVideos(list) {
+  app.innerHTML = "";
+
+  if (list.length === 0) {
+    app.innerHTML = "<p>該当する歌動画がありません</p>";
+    return;
+  }
+
+  const grouped = {};
+
+  list.forEach(video => {
+    const year = video.date.slice(0, 4);
+
+    if (!grouped[year]) {
+      grouped[year] = [];
+    }
+
+    grouped[year].push(video);
+  });
+
+  Object.keys(grouped).sort().forEach(year => {
+    const title = document.createElement("h1");
+    title.textContent = year + "年の歌動画";
+    app.appendChild(title);
+
+    const container = document.createElement("div");
+    container.className = "container";
+
+    grouped[year].forEach(video => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <a href="${video.url}" target="_blank">
+          <img src="https://img.youtube.com/vi/${getVideoId(video)}/hqdefault.jpg">
+          <p class="year">${video.date.slice(0, 4)}年</p>
+          <p>${video.title}</p>
+        </a>
+      `;
+
+      container.appendChild(card);
+    });
+
+    app.appendChild(container);
+  });
+}
+
+function showAllSongs() {
+  renderVideos(videos);
+}
+
+function filterByYear(year) {
+  const filtered = videos.filter(video => video.date.startsWith(year));
+  renderVideos(filtered);
+}
+
+const allBtn = document.createElement("button");
+allBtn.textContent = "全部表示";
+allBtn.onclick = showAllSongs;
+buttonsDiv.appendChild(allBtn);
+
+["2023", "2024", "2025", "2026"].forEach(year => {
+  const btn = document.createElement("button");
+  btn.textContent = year + "年";
+  btn.onclick = function() {
+    filterByYear(year);
+  };
+  buttonsDiv.appendChild(btn);
+});
+
+document.getElementById("search").addEventListener("input", function(e) {
+  const keyword = e.target.value.toLowerCase();
+
+  const filtered = videos.filter(video =>
+    video.title.toLowerCase().includes(keyword)
+  );
+
+  renderVideos(filtered);
+});
+
+document.querySelector(".menu-btn").addEventListener("click", function() {
+  const menu = document.querySelector(".menu-content");
+
+  if (menu.style.display === "flex") {
+    menu.style.display = "none";
+  } else {
+    menu.style.display = "flex";
+  }
+});
+
+showAllSongs();
+</script>
+
+</body>
+</html>
