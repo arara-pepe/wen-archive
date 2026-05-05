@@ -307,7 +307,11 @@ function getVideoId(video) {
 
   return url.searchParams.get("v");
 }
-
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  return d.getFullYear() + "年" + (d.getMonth() + 1) + "/" + d.getDate();
+}
+  
 function renderVideos(list) {
   app.innerHTML = "";
 
@@ -343,7 +347,7 @@ function renderVideos(list) {
       card.innerHTML = `
         <a href="${video.url}" target="_blank">
           <img src="https://img.youtube.com/vi/${getVideoId(video)}/hqdefault.jpg">
-          <p class="year">${video.date.slice(0, 4)}年</p>
+          <p class="year">${formatDate(video.date)}</p>
           <p>${video.title}</p>
         </a>
       `;
