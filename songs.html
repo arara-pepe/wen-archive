@@ -119,7 +119,6 @@ button:hover {
   box-shadow:
     0 8px 20px rgba(255,140,155,0.25),
     0 4px 10px rgba(181,235,250,0.4);
-  animation: floaty 3s ease-in-out infinite;
 }
 
 .card a {
@@ -167,6 +166,17 @@ button:hover {
     width: 100%;
     max-width: 320px;
   }
+}
+    .card {
+  transition: transform 0.45s cubic-bezier(0.25, 1.7, 0.5, 1);
+}
+
+.card:hover {
+  transform: scale(1.08);
+}
+
+.card:active {
+  transform: scale(0.97);
 }
   </style>
 </head>
